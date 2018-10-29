@@ -12,7 +12,8 @@ class DualNum(num): #< <N, N>, +, *>
     def __add__(self, other):
         if type(self) != type(other): # other in N
             other = DualNum(other) # (c)' = 0
-        return DualNum(pair = tuple(map(lambda x,y: x+y, self.tpl(), other.tpl())))
+        return DualNum(self.R()+other.R(), self.I() + other.I())
+        #return DualNum(pair = tuple(map(lambda x,y: x+y, self.tpl(), other.tpl())))
     def __neg__(self):
         return DualNum(pair = tuple(map(lambda x: -x, self.tpl())))
     def __mul__(self, other):

@@ -16,15 +16,15 @@ class D(dual):
         else:
             return D(self.R() ** other, other * self.R()**(other-1) * self.I()) # (f^n)' = nf^(n-1)*f'
     def sqrt (self): #(sqrt(x))'=1/2sqrt(x)
-        return dual(rm.sqrt(self.R()), 0.5*self.I()/rm.sqrt(self.R()))
+        return D(rm.sqrt(self.R()), 0.5*self.I()/rm.sqrt(self.R()))
     def sin(self):
-        return dual(rm.sin(self.R()), rm.cos(self.R())*self.I())
+        return D(rm.sin(self.R()), rm.cos(self.R())*self.I())
     def cos(self):
-        return dual(rm.cos(self.R()), -1*rm.sin(self.R())*self.I())
+        return D(rm.cos(self.R()), -1*rm.sin(self.R())*self.I())
     def exp (self):
-        return dual(rm.exp(self.R()), rm.exp(self.R())*self.I())
+        return D(rm.exp(self.R()), rm.exp(self.R())*self.I())
     def log (self):
-        return dual(rm.log(self.R()), self.I()/self.R())
+        return D(rm.log(self.R()), self.I()/self.R())
     def tan(self):
         return sin(self)/cos(self)
     def cot(self):
