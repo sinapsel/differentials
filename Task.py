@@ -1,6 +1,7 @@
 #-*-coding:utf8;-*-
 
-from Differential import *
+import Methods
+from Methods import root1a
 
 class Task0:
     '''
@@ -13,10 +14,11 @@ class Task0:
     x1(t) = vt
     x2(t) = s0 + ut + a*t^2/2
     x1(T) = x2(T), s0 + (u-v)T + a*T^2/2 = 0 where T is variable
-    let find roots for phi(T) = a*T^2/2 + (u-v)*T + s0 = 0
+    Найдем корни функции phi(T) = a*T^2/2 + (u-v)*T + s0 = 0, где T больше 0 
     '''
     def solve(self):
-        return root_1(lambda T: 0.5*self.a * T ** 2 + (self.u - self.v)*T + self.s0)
+        v, u, a, s0 = self.v, self.u, self.a, self.s0
+        return root1a(f = lambda T: 0.5*a * T ** 2 + (u - v)*T + s0, method = Methods.newtonraphson, domain = (0,1e10))
 
 if __name__ == '__main__':
     Task0(10, 1, 0.2, 5).solve()

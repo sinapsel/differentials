@@ -34,24 +34,12 @@ class D(dual):
     
 class Df:
     def get_pair(self, f, x):
-        return f(D(x,1)) 
+        return f(*(map(lambda p: D(p,1), x))).tpl()
     def __call__(self, f, x):
         return f(*(map(lambda p: D(p,1), x))).I()
     
 def dfdarg(f, args):
     return Df()(f, args)
-
-def root_1(f, a = -100, b = 100, eps = 0.001):
-    x_0 = (a+b)/2
-    while abs(f(x_0)) > eps or x_0 == 0 and (x_0 >= a and b >= x_0):
-        u, v = Df().get_pair(f, x_0).tpl()
-        if v == 0:
-            if u == 0: return x_0
-            v += eps
-        x_0 -= u/v
-        #print(x_0, u,v)
-    return x_0
-        
     
 pow = D.__pow__
 sqrt = D.sqrt
