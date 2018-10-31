@@ -6,7 +6,7 @@ class Pair:
     def __init__(self, fst = 0, snd = 0, pair = None):
         if pair != None:
             fst, snd = pair
-        self.pair = (fst, snd)
+        self.pair = (N(fst), N(snd))
     def fst(self):
         return self.pair[0]
     def snd(self):
