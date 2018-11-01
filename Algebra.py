@@ -14,7 +14,10 @@ class DualNum(num): #< <N, N>, +, *>
         return (b.__class__).__bases__[0] == a.__class__
     @classmethod
     def relative(cls, a, b): # <siblings | child | parent | aliens>
-        return [a,b] if type(a) == type(b) else [b] if a.is_parent(a,b) else [a] if a.is_parent(b,a) else None
+        try:
+            return [a,b] if type(a) == type(b) else [b] if a.is_parent(a,b) else [a] if a.is_parent(b,a) else None
+        except AttributeError:
+            return None
     @classmethod
     def new(cls, fst = 0, snd = 0, pair = None, cpy = None):
         return DualNum(fst, snd)

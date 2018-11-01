@@ -13,19 +13,20 @@ class D(dual):
         return D(fst, snd)
 
     def __truediv__(self, other): # (u/v)' = (u'v - v'u)/v^2
-        if type(self) != type(other):
+        if self.relative(self, other) == None:
             other = D(other)
         return D(self.R() / other.R(), (self.I()*other.R() - other.I()*self.R())/(other.R()**2))
     def __rtruediv__(self, other): #other/self
-        if type(self) != type(other):
+        if self.relative(self, other) == None:
             other = D(other)
         return D(other.R() / self.R(), (other.I()*self.R() - self.I()*other.R())/(self.R()**2))
         #return self * D(1/other.R(), -(other.I())/(other.R()**2))
-    def __pow__(self, other):
-        if type(other) == type(self):
-            pass
-        else:
-            return D(self.R() ** other, other * self.R()**(other-1) * self.I()) # (f^n)' = nf^(n-1)*f'
+    def __pow__(self, other): 
+        if self.relative(self, other) == None:
+            other = D(other)
+        return D(self.R() ** other.R(), self.R() ** (other.R()-1) * ( (self.I() * other.R()) + (other.I() * self.R() * rm.log(self.R())) ) ) # (u^v)' = u^(v-1) * ((u' * v) + (v' * u ln u))
+        #else:
+        #    return D(self.R() ** other, other * self.R()**(other-1) * self.I()) # (f^n)' = nf^(n-1)*f'
 
     #trigonometry
     def acos(self):
@@ -40,8 +41,11 @@ class D(dual):
         return D(rm.atan(self.R()), 1 / (self.R()**2 + 1) * self.I())
     def atanh(self):
         return D(rm.atanh(self.R()), 1 / (1 - self.R()**2) * self.I())
-    def cos(self):
-        return D(rm.cos(self.R()), - rm.sin(self.R()) * self.I())
+    @classmethod
+    def cos(cls, x):
+        if cls.relative(x, D(0,0)) == None:
+            return rm.cos(x)
+        return D(rm.cos(x.R()), - rm.sin(x.R()) * x.I())
     def cosh(self):
         return D(rm.cosh(self.R()), rm.sinh(self.R()) * self.I())
     def sin(self):
@@ -72,9 +76,16 @@ class Df:
     
 def dfdarg(f, args):
     return Df()(f, args)
-    
 
-###LINKS to functions    
+def full_derivative(f, args):
+    return f(*map(lambda p: D(p,1), args)).I()
+def partial_derivative(f, args, i):
+    return f(*map(lambda j: D(j[1], int(j[0] == i)), enumerate(args))).I()
+    
+def gradient(f, args):
+    return  tuple(f(*map(lambda j: D(j[1], int(j[0] == i)), enumerate(args))).I() for i,p in enumerate(args)) 
+
+###LINKS to functions AND CONSTANTS
 
 pow = D.__pow__
 acos = D.acos
